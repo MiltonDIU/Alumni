@@ -10,6 +10,8 @@ use App\Http\Controllers\Auth\ChangePasswordController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\SocialsController;
+use App\Http\Controllers\Alumni\DashboardController as AlumniDashboardController;
+use App\Http\Controllers\Alumni\FrontendController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -21,7 +23,11 @@ use App\Http\Controllers\Admin\SocialsController;
 |
 */
 
+
+
+
 Route::redirect('/', '/login');
+
 Route::get('/home', function () {
     if (session('status')) {
         return redirect()->route('admin.home')->with('status', session('status'));
@@ -80,14 +86,12 @@ Route::group(['prefix' => 'profile', 'as' => 'profile.', 'middleware' => ['auth'
 
 
 
+Route::group(['prefix' => 'alumni', 'as' => 'alumni.', 'middleware' => ['auth']], function () {
+    Route::get('/login2', [FrontendController::class, 'login'])->name('logidfdsfn');
+    Route::get('/', [AlumniDashboardController::class, 'index'])->name('dashboard');
 
-
-
-
-
-Route::get('/', function () {
-    return view('welcome');
 });
+
 
 Auth::routes();
 

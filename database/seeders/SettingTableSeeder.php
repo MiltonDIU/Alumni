@@ -20,10 +20,10 @@ class SettingTableSeeder extends Seeder
 
         Setting::create( [
             "id" => "1",
-            "site_title" => "Parents, Daffodil International University",
-            "meta_description" => "DIU, Parents, Student Information, Parent Portal, Daffodil International University",
-            "meta_keywords" => "DIU, Parents, Student Information, Parent Portal, Daffodil International University",
-            "site_email" => 'info@daffodilvarsity.edu.bd',
+            "site_title" => "Alumni",
+            "meta_description" => "SSC Batch-1980",
+            "meta_keywords" => "Alumni,ssc, batch, sss-1980",
+            "site_email" => 'info@alumni',
             "site_phone_number" => "01674797580",
             "google_analytics" => "",
             "maintenance_mode" => "No",
@@ -32,7 +32,7 @@ class SettingTableSeeder extends Seeder
             "summary" => "",
             "about" => "",
             "admin_approval" => "1",
-            "copyright" => "Daffodil International University",
+            "copyright" => "alumni",
         ]);
 
     }

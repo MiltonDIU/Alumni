@@ -1,4 +1,4 @@
-@extends('layouts.login')
+@extends('alumni.layouts.login')
 @section('content')
     <form action="{{ route('login') }}" method="POST">
         @csrf
