@@ -48,19 +48,19 @@
         <ul class="nav nav-pills flex-column mb-auto">
             <p class="sidenav_title">Menu</p>
             <li class="nav-item">
-                <a href="#" class="nav-link active" aria-current="page">
+                <a href="{{ route('alumni.dashboard') }}" class="nav-link active" aria-current="page">
                     <i class="bi bi-house"></i>
                     Home
                 </a>
             </li>
             <li>
-                <a href="#" class="nav-link">
+                <a href="{{ route('alumni.batch-mate') }}" class="nav-link">
                     <i class="bi bi-people-fill"></i>
                     Friends List
                 </a>
             </li>
             <li>
-                <a href="#" class="nav-link">
+                <a href="{{ route('alumni.schools') }}" class="nav-link">
                     <i class="bi bi-building"></i>
                     School
                 </a>
@@ -108,9 +108,9 @@
     <!-- ---------------------- side navbar end ---------------------- -->
 
     <!-- ---------------------- Dashboard content end ---------------------- -->
-    <div class="dashboard_content">
-        <div class="dashboard_content_top">
-            <h2 class="Welcome_message font_22">Hi, <span>User Name</span>, We have found your <span>9453</span> friends 👋</h2>
+    <div class="dashboard_content {{ $page_class??'' }}">
+        <div class="dashboard_content_top ">
+           @yield('top_content')
 
             <div class="profile_notification">
                 <div class="notification">

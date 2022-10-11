@@ -87,8 +87,11 @@ Route::group(['prefix' => 'profile', 'as' => 'profile.', 'middleware' => ['auth'
 
 
 Route::group(['prefix' => 'alumni', 'as' => 'alumni.', 'middleware' => ['auth']], function () {
-    Route::get('/login2', [FrontendController::class, 'login'])->name('logidfdsfn');
     Route::get('/', [AlumniDashboardController::class, 'index'])->name('dashboard');
+    Route::get('/batch-mate', [AlumniDashboardController::class, 'batchMate'])->name('batch-mate');
+    Route::get('/batch-mate/{profile}', [AlumniDashboardController::class, 'batchMateProfile'])->name('batch-mate.profile');
+    Route::get('/schools', [AlumniDashboardController::class, 'schools'])->name('schools');
+    Route::get('/school/{name}', [AlumniDashboardController::class, 'schoolProfile'])->name('schoolProfile');
 
 });
 

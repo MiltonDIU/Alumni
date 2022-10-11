@@ -22,4 +22,19 @@ class DashboardController extends Controller
     public function index(){
         return view('alumni.dashboard');
     }
+    public function batchMate(){
+        return view('alumni.batch-mate');
+    }
+    public function batchMateProfile(){
+        return view('alumni.batch-mate-profile');
+    }
+    public function schools(){
+        return view('alumni.schools');
+    }
+
+    public function schoolProfile(){
+        return view('alumni.schoolProfile');
+    }
+
+
 }

@@ -1,4 +1,7 @@
 @extends('alumni.layouts.master')
+@section('top_content')
+    <h2 class="Welcome_message font_22">Hi, <span>User Name</span>, We have found your <span>9453</span> friends 👋</h2>
+@endsection
 @section('content')
     <div class="dashboard_tab d-flex">
         <a href="#">
@@ -46,7 +49,7 @@
 
         <div class="event_main">
             <div class="event_box">
-                <div class="event_banner" style="background: {{ url('assets/alumni/images/gray.png') }}">
+                <div class="event_banner" style="background: url({{ url('assets/alumni/images/gray.png') }});">
                     <div class="event_date">
                         <p class="day">8</p>
                         <p class="month">May</p>
@@ -95,7 +98,7 @@
             </div>
 
             <div class="event_box">
-                <div class="event_banner" style="background: {{ url('assets/alumni/images/gray.png') }}">
+                <div class="event_banner" style="background: url({{ url('assets/alumni/images/gray.png') }});">
                     <div class="event_date">
                         <p class="day">8</p>
                         <p class="month">May</p>
