@@ -21,11 +21,15 @@ class StoreUserRequest extends FormRequest
                 'string',
                 'required',
             ],
-            'email' => [
+            'first_name' => [
+                'string',
                 'required',
-                'unique:users',
             ],
-            'mobile' => [
+            'last_name' => [
+                'string',
+                'required',
+            ],
+            'email' => [
                 'required',
                 'unique:users',
             ],
@@ -38,6 +42,25 @@ class StoreUserRequest extends FormRequest
             'roles' => [
                 'required',
                 'array',
+            ],
+            'mobile' => [
+                'string',
+                'nullable',
+            ],
+            'date_of_birth' => [
+                'required',
+                'date_format:' . config('panel.date_format'),
+            ],
+            'batch_id' => [
+                'required',
+                'integer',
+            ],
+            'school_id' => [
+                'required',
+                'integer',
+            ],
+            'gender' => [
+                'required',
             ],
         ];
     }

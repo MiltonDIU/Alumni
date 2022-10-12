@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Traits\MediaUploadingTrait;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Http\Resources\Admin\UserResource;
@@ -13,17 +14,22 @@ use Symfony\Component\HttpFoundation\Response;
 
 class UsersApiController extends Controller
 {
+    use MediaUploadingTrait;
+
     public function index()
     {
         abort_if(Gate::denies('user_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        return new UserResource(User::with(['roles'])->get());
+        return new UserResource(User::with(['roles', 'batch', 'school'])->get());
     }
 
     public function store(StoreUserRequest $request)
     {
         $user = User::create($request->all());
         $user->roles()->sync($request->input('roles', []));
+        if ($request->input('avatar', false)) {
+            $user->addMedia(storage_path('tmp/uploads/' . basename($request->input('avatar'))))->toMediaCollection('avatar');
+        }
 
         return (new UserResource($user))
             ->response()
@@ -34,13 +40,23 @@ class UsersApiController extends Controller
     {
         abort_if(Gate::denies('user_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        return new UserResource($user->load(['roles']));
+        return new UserResource($user->load(['roles', 'batch', 'school']));
     }
 
     public function update(UpdateUserRequest $request, User $user)
     {
         $user->update($request->all());
         $user->roles()->sync($request->input('roles', []));
+        if ($request->input('avatar', false)) {
+            if (!$user->avatar || $request->input('avatar') !== $user->avatar->file_name) {
+                if ($user->avatar) {
+                    $user->avatar->delete();
+                }
+                $user->addMedia(storage_path('tmp/uploads/' . basename($request->input('avatar'))))->toMediaCollection('avatar');
+            }
+        } elseif ($user->avatar) {
+            $user->avatar->delete();
+        }
 
         return (new UserResource($user))
             ->response()

@@ -33,18 +33,26 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.user.fields.email') }}
+                            {{ trans('cruds.user.fields.first_name') }}
                         </th>
                         <td>
-                            {{ $user->email }}
+                            {{ $user->first_name }}
                         </td>
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.user.fields.mobile') }}
+                            {{ trans('cruds.user.fields.last_name') }}
                         </th>
                         <td>
-                            {{ $user->mobile }}
+                            {{ $user->last_name }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.user.fields.email') }}
+                        </th>
+                        <td>
+                            {{ $user->email }}
                         </td>
                     </tr>
                     <tr>
@@ -57,28 +65,64 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.user.fields.approved') }}
-                        </th>
-                        <td>
-                            <input type="checkbox" disabled="disabled" {{ $user->approved ? 'checked' : '' }}>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
-                            {{ trans('cruds.user.fields.verified') }}
-                        </th>
-                        <td>
-                            <input type="checkbox" disabled="disabled" {{ $user->verified ? 'checked' : '' }}>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
                             {{ trans('cruds.user.fields.roles') }}
                         </th>
                         <td>
                             @foreach($user->roles as $key => $roles)
                                 <span class="label label-info">{{ $roles->title }}</span>
                             @endforeach
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.user.fields.mobile') }}
+                        </th>
+                        <td>
+                            {{ $user->mobile }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.user.fields.date_of_birth') }}
+                        </th>
+                        <td>
+                            {{ $user->date_of_birth }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.user.fields.avatar') }}
+                        </th>
+                        <td>
+                            @if($user->avatar)
+                                <a href="{{ $user->avatar->getUrl() }}" target="_blank" style="display: inline-block">
+                                    <img src="{{ $user->avatar->getUrl('thumb') }}">
+                                </a>
+                            @endif
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.user.fields.batch') }}
+                        </th>
+                        <td>
+                            {{ $user->batch->title ?? '' }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.user.fields.school') }}
+                        </th>
+                        <td>
+                            {{ $user->school->name ?? '' }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.user.fields.gender') }}
+                        </th>
+                        <td>
+                            {{ App\Models\User::GENDER_SELECT[$user->gender] ?? '' }}
                         </td>
                     </tr>
                     </tbody>
@@ -92,6 +136,22 @@
         </div>
     </div>
 
-
+    <div class="card">
+        <div class="card-header">
+            {{ trans('global.relatedData') }}
+        </div>
+        <ul class="nav nav-tabs" role="tablist" id="relationship-tabs">
+            <li class="nav-item">
+                <a class="nav-link" href="#user_events" role="tab" data-toggle="tab">
+                    {{ trans('cruds.event.title') }}
+                </a>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane" role="tabpanel" id="user_events">
+                @includeIf('admin.users.relationships.userEvents', ['events' => $user->userEvents])
+            </div>
+        </div>
+    </div>
 
 @endsection

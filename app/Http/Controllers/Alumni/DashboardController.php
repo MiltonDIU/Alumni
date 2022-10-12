@@ -35,6 +35,8 @@ class DashboardController extends Controller
     public function schoolProfile(){
         return view('alumni.schoolProfile');
     }
-
+    public function events(){
+        return view('alumni.events');
+    }
 
 }

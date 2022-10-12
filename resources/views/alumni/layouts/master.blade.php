@@ -66,7 +66,7 @@
                 </a>
             </li>
             <li>
-                <a href="#" class="nav-link">
+                <a href="{{ route('alumni.events') }}" class="nav-link">
                     <i class="bi bi-calendar-event"></i>
                     Events
                 </a>

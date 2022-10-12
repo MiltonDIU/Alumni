@@ -94,6 +94,140 @@
                     </li>
                 @endcan
 
+                @can('batch_access')
+                    <li class=" nav-item">
+                        <a href="{{ route("admin.batches.index") }}" class=" nav-link {{ request()->is("admin/batches") || request()->is("admin/batches/*") ? "c-active" : "" }}">
+                            <i class="fa-fw fas fa-cogs  nav-icon">
+
+                            </i>
+                            {{ trans('cruds.batch.title') }}
+                        </a>
+                    </li>
+                @endcan
+                @can('division_access')
+                    <li class=" nav-item">
+                        <a href="{{ route("admin.divisions.index") }}" class=" nav-link {{ request()->is("admin/divisions") || request()->is("admin/divisions/*") ? "c-active" : "" }}">
+                            <i class="fa-fw fas fa-cogs  nav-icon">
+
+                            </i>
+                            {{ trans('cruds.division.title') }}
+                        </a>
+                    </li>
+                @endcan
+                @can('district_access')
+                    <li class=" nav-item">
+                        <a href="{{ route("admin.districts.index") }}" class=" nav-link {{ request()->is("admin/districts") || request()->is("admin/districts/*") ? "c-active" : "" }}">
+                            <i class="fa-fw fas fa-cogs  nav-icon">
+
+                            </i>
+                            {{ trans('cruds.district.title') }}
+                        </a>
+                    </li>
+                @endcan
+                @can('upazila_access')
+                    <li class=" nav-item">
+                        <a href="{{ route("admin.upazilas.index") }}" class=" nav-link {{ request()->is("admin/upazilas") || request()->is("admin/upazilas/*") ? "c-active" : "" }}">
+                            <i class="fa-fw fas fa-cogs  nav-icon">
+
+                            </i>
+                            {{ trans('cruds.upazila.title') }}
+                        </a>
+                    </li>
+                @endcan
+                @can('union_access')
+                    <li class=" nav-item">
+                        <a href="{{ route("admin.unions.index") }}" class=" nav-link {{ request()->is("admin/unions") || request()->is("admin/unions/*") ? "c-active" : "" }}">
+                            <i class="fa-fw fas fa-cogs  nav-icon">
+
+                            </i>
+                            {{ trans('cruds.union.title') }}
+                        </a>
+                    </li>
+                @endcan
+                @can('field_of_work_access')
+                    <li class=" nav-item">
+                        <a href="{{ route("admin.field-of-works.index") }}" class=" nav-link {{ request()->is("admin/field-of-works") || request()->is("admin/field-of-works/*") ? "c-active" : "" }}">
+                            <i class="fa-fw fas fa-cogs  nav-icon">
+
+                            </i>
+                            {{ trans('cruds.fieldOfWork.title') }}
+                        </a>
+                    </li>
+                @endcan
+                @can('designation_access')
+                    <li class=" nav-item">
+                        <a href="{{ route("admin.designations.index") }}" class=" nav-link {{ request()->is("admin/designations") || request()->is("admin/designations/*") ? "c-active" : "" }}">
+                            <i class="fa-fw fas fa-cogs  nav-icon">
+
+                            </i>
+                            {{ trans('cruds.designation.title') }}
+                        </a>
+                    </li>
+                @endcan
+                @can('organization_access')
+                    <li class=" nav-item">
+                        <a href="{{ route("admin.organizations.index") }}" class=" nav-link {{ request()->is("admin/organizations") || request()->is("admin/organizations/*") ? "c-active" : "" }}">
+                            <i class="fa-fw fas fa-cogs  nav-icon">
+
+                            </i>
+                            {{ trans('cruds.organization.title') }}
+                        </a>
+                    </li>
+                @endcan
+                @can('school_access')
+                    <li class=" nav-item">
+                        <a href="{{ route("admin.schools.index") }}" class=" nav-link {{ request()->is("admin/schools") || request()->is("admin/schools/*") ? "c-active" : "" }}">
+                            <i class="fa-fw fas fa-cogs  nav-icon">
+
+                            </i>
+                            {{ trans('cruds.school.title') }}
+                        </a>
+                    </li>
+                @endcan
+                @can('work_access')
+                    <li class=" nav-item">
+                        <a href="{{ route("admin.works.index") }}" class=" nav-link {{ request()->is("admin/works") || request()->is("admin/works/*") ? "c-active" : "" }}">
+                            <i class="fa-fw fas fa-cogs  nav-icon">
+
+                            </i>
+                            {{ trans('cruds.work.title') }}
+                        </a>
+                    </li>
+                @endcan
+                @can('address_access')
+                    <li class=" nav-item">
+                        <a href="{{ route("admin.addresses.index") }}" class=" nav-link {{ request()->is("admin/addresses") || request()->is("admin/addresses/*") ? "c-active" : "" }}">
+                            <i class="fa-fw fas fa-cogs  nav-icon">
+
+                            </i>
+                            {{ trans('cruds.address.title') }}
+                        </a>
+                    </li>
+                @endcan
+                @can('event_category_access')
+                    <li class=" nav-item">
+                        <a href="{{ route("admin.event-categories.index") }}" class=" nav-link {{ request()->is("admin/event-categories") || request()->is("admin/event-categories/*") ? "c-active" : "" }}">
+                            <i class="fa-fw fas fa-cogs  nav-icon">
+
+                            </i>
+                            {{ trans('cruds.eventCategory.title') }}
+                        </a>
+                    </li>
+                @endcan
+                @can('event_access')
+                    <li class=" nav-item">
+                        <a href="{{ route("admin.events.index") }}" class=" nav-link {{ request()->is("admin/events") || request()->is("admin/events/*") ? "c-active" : "" }}">
+                            <i class="fa-fw fas fa-cogs  nav-icon">
+
+                            </i>
+                            {{ trans('cruds.event.title') }}
+                        </a>
+                    </li>
+                @endcan
+
+
+
+
 {{--                @can('social_access')--}}
 {{--                    <li class="nav-item">--}}
 {{--                        <a href="{{ route("admin.socials.index") }}" class="nav-link {{ request()->is("admin/socials") || request()->is("admin/socials/*") ? "c-active" : "" }}">--}}

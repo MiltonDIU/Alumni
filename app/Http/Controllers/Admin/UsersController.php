@@ -3,24 +3,30 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Traits\MediaUploadingTrait;
 use App\Http\Requests\MassDestroyUserRequest;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
+use App\Models\Batch;
 use App\Models\Role;
+use App\Models\School;
 use App\Models\User;
 use Gate;
 use Illuminate\Http\Request;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Symfony\Component\HttpFoundation\Response;
 use Yajra\DataTables\Facades\DataTables;
 
 class UsersController extends Controller
 {
+    use MediaUploadingTrait;
+
     public function index(Request $request)
     {
         abort_if(Gate::denies('user_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         if ($request->ajax()) {
-            $query = User::with(['roles'])->select(sprintf('%s.*', (new User())->table));
+            $query = User::with(['roles', 'batch', 'school'])->select(sprintf('%s.*', (new User())->table));
             $table = Datatables::of($query);
 
             $table->addColumn('placeholder', '&nbsp;');
@@ -47,19 +53,16 @@ class UsersController extends Controller
             $table->editColumn('name', function ($row) {
                 return $row->name ? $row->name : '';
             });
+            $table->editColumn('first_name', function ($row) {
+                return $row->first_name ? $row->first_name : '';
+            });
+            $table->editColumn('last_name', function ($row) {
+                return $row->last_name ? $row->last_name : '';
+            });
             $table->editColumn('email', function ($row) {
                 return $row->email ? $row->email : '';
             });
-            $table->editColumn('mobile', function ($row) {
-                return $row->mobile ? $row->mobile : '';
-            });
 
-            $table->editColumn('approved', function ($row) {
-                return '<input type="checkbox" disabled ' . ($row->approved ? 'checked' : null) . '>';
-            });
-            $table->editColumn('verified', function ($row) {
-                return '<input type="checkbox" disabled ' . ($row->verified ? 'checked' : null) . '>';
-            });
             $table->editColumn('roles', function ($row) {
                 $labels = [];
                 foreach ($row->roles as $role) {
@@ -68,8 +71,33 @@ class UsersController extends Controller
 
                 return implode(' ', $labels);
             });
+            $table->editColumn('mobile', function ($row) {
+                return $row->mobile ? $row->mobile : '';
+            });
+            $table->editColumn('avatar', function ($row) {
+                if ($photo = $row->avatar) {
+                    return sprintf(
+                        '<a href="%s" target="_blank"><img src="%s" width="50px" height="50px"></a>',
+                        $photo->url,
+                        $photo->thumbnail
+                    );
+                }
 
-            $table->rawColumns(['actions', 'placeholder', 'approved', 'verified', 'roles']);
+                return '';
+            });
+            $table->addColumn('batch_title', function ($row) {
+                return $row->batch ? $row->batch->title : '';
+            });
+
+            $table->addColumn('school_name', function ($row) {
+                return $row->school ? $row->school->name : '';
+            });
+
+            $table->editColumn('gender', function ($row) {
+                return $row->gender ? User::GENDER_SELECT[$row->gender] : '';
+            });
+
+            $table->rawColumns(['actions', 'placeholder', 'roles', 'avatar', 'batch', 'school']);
 
             return $table->make(true);
         }
@@ -83,13 +111,24 @@ class UsersController extends Controller
 
         $roles = Role::pluck('title', 'id');
 
-        return view('admin.users.create', compact('roles'));
+        $batches = Batch::pluck('title', 'id')->prepend(trans('global.pleaseSelect'), '');
+
+        $schools = School::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+
+        return view('admin.users.create', compact('batches', 'roles', 'schools'));
     }
 
     public function store(StoreUserRequest $request)
     {
         $user = User::create($request->all());
         $user->roles()->sync($request->input('roles', []));
+        if ($request->input('avatar', false)) {
+            $user->addMedia(storage_path('tmp/uploads/' . basename($request->input('avatar'))))->toMediaCollection('avatar');
+        }
+
+        if ($media = $request->input('ck-media', false)) {
+            Media::whereIn('id', $media)->update(['model_id' => $user->id]);
+        }
 
         return redirect()->route('admin.users.index');
     }
@@ -100,15 +139,29 @@ class UsersController extends Controller
 
         $roles = Role::pluck('title', 'id');
 
-        $user->load('roles');
+        $batches = Batch::pluck('title', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        return view('admin.users.edit', compact('roles', 'user'));
+        $schools = School::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+
+        $user->load('roles', 'batch', 'school');
+
+        return view('admin.users.edit', compact('batches', 'roles', 'schools', 'user'));
     }
 
     public function update(UpdateUserRequest $request, User $user)
     {
         $user->update($request->all());
         $user->roles()->sync($request->input('roles', []));
+        if ($request->input('avatar', false)) {
+            if (!$user->avatar || $request->input('avatar') !== $user->avatar->file_name) {
+                if ($user->avatar) {
+                    $user->avatar->delete();
+                }
+                $user->addMedia(storage_path('tmp/uploads/' . basename($request->input('avatar'))))->toMediaCollection('avatar');
+            }
+        } elseif ($user->avatar) {
+            $user->avatar->delete();
+        }
 
         return redirect()->route('admin.users.index');
     }
@@ -117,7 +170,7 @@ class UsersController extends Controller
     {
         abort_if(Gate::denies('user_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $user->load('roles');
+        $user->load('roles', 'batch', 'school', 'userEvents');
 
         return view('admin.users.show', compact('user'));
     }
@@ -136,5 +189,17 @@ class UsersController extends Controller
         User::whereIn('id', request('ids'))->delete();
 
         return response(null, Response::HTTP_NO_CONTENT);
+    }
+
+    public function storeCKEditorImages(Request $request)
+    {
+        abort_if(Gate::denies('user_create') && Gate::denies('user_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
+        $model         = new User();
+        $model->id     = $request->input('crud_id', 0);
+        $model->exists = true;
+        $media         = $model->addMediaFromRequest('upload')->toMediaCollection('ck-media');
+
+        return response()->json(['id' => $media->id, 'url' => $media->getUrl()], Response::HTTP_CREATED);
     }
 }
