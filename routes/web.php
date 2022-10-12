@@ -10,8 +10,22 @@ use App\Http\Controllers\Auth\ChangePasswordController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\SocialsController;
+use App\Http\Controllers\Admin\DivisionController;
 use App\Http\Controllers\Alumni\DashboardController as AlumniDashboardController;
 use App\Http\Controllers\Alumni\FrontendController;
+use App\Http\Controllers\Admin\BatchesController;
+use App\Http\Controllers\Admin\AddressesController;
+use App\Http\Controllers\Admin\DesignationsController;
+use App\Http\Controllers\Admin\DistrictsController;
+use App\Http\Controllers\Admin\EventCategoriesController;
+use App\Http\Controllers\Admin\EventsController;
+use App\Http\Controllers\Admin\FieldOfWorksController;
+use App\Http\Controllers\Admin\GlobalSearchController;
+use App\Http\Controllers\Admin\OrganizationsController;
+use App\Http\Controllers\Admin\SchoolsController;
+use App\Http\Controllers\Admin\UnionsController;
+use App\Http\Controllers\Admin\UpazilaController;
+use App\Http\Controllers\Admin\WorksController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -42,11 +56,20 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth']], 
     Route::get('/', [HomeController::class, 'index'])->name('home');
     Route::resources([
         'socials' => SocialsController::class,
+        'divisions' => DivisionController::class,
+        'designations' => DesignationsController::class,
+        'organizations' => OrganizationsController::class,
+        'schools' => SchoolsController::class,
+        'works' => WorksController::class,
+        'addresses' => AddressesController::class,
+        'event-categories' => EventCategoriesController::class,
+        'events' => EventsController::class,
+        'batches' => BatchesController::class,
+        'field-of-works' => FieldOfWorksController::class,
+        'upazilas' => UpazilaController::class,
+        'districts' => DistrictsController::class,
+        'unions' => UnionsController::class,
     ]);
-
-
-    // Socials
-    Route::delete('socials/destroy', [SocialsController::class, 'massDestroy'])->name('socials.massDestroy');
 
     // Permissions
     Route::delete('permissions/destroy', [PermissionsController::class,'massDestroy'])->name('permissions.massDestroy');
@@ -59,10 +82,85 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth']], 
     // Users
     Route::delete('users/destroy', [UsersController::class,'massDestroy'])->name('users.massDestroy');
     Route::resource('users', UsersController::class);
+    Route::post('users/media', [UsersController::class,'storeMedia'])->name('users.storeMedia');
+    Route::post('users/ckmedia', [UsersController::class,'storeCKEditorImages'])->name('users.storeCKEditorImages');
+
+    // Batches
+    Route::delete('batches/destroy', [BatchesController::class,'massDestroy'])->name('batches.massDestroy');
+
+
+    // Division
+    Route::delete('divisions/destroy', [DivisionController::class, 'massDestroy'])->name('divisions.massDestroy');
+    Route::post('divisions/parse-csv-import', [DivisionController::class, 'parseCsvImport'])->name('divisions.parseCsvImport');
+    Route::post('divisions/process-csv-import', [DivisionController::class, 'processCsvImport'])->name('divisions.processCsvImport');
+
+    // Districts
+    Route::delete('districts/destroy', [DistrictsController::class, 'massDestroy '])->name('districts.massDestroy');
+    Route::post('districts/parse-csv-import', [DistrictsController::class, 'parseCsvImport '])->name('districts.parseCsvImport');
+    Route::post('districts/process-csv-import', [DistrictsController::class, 'processCsvImport '])->name('districts.processCsvImport');
+
+    // Upazila
+    Route::delete('upazilas/destroy', [UpazilaController::class, 'massDestroy '])->name('upazilas.massDestroy');
+    Route::post('upazilas/parse-csv-import', [UpazilaController::class, 'parseCsvImport '])->name('upazilas.parseCsvImport');
+    Route::post('upazilas/process-csv-import', [UpazilaController::class, 'processCsvImport '])->name('upazilas.processCsvImport');
+
+    // Unions
+    Route::delete('unions/destroy', [UnionsController::class, 'massDestroy '])->name('unions.massDestroy');
+    Route::post('unions/parse-csv-import', [UnionsController::class, 'parseCsvImport '])->name('unions.parseCsvImport');
+    Route::post('unions/process-csv-import', [UnionsController::class, 'processCsvImport '])->name('unions.processCsvImport');
+
+    // Field Of Works
+    Route::delete('field-of-works/destroy', [FieldOfWorksController::class, 'massDestroy'])->name('field-of-works.massDestroy');
+    Route::post('field-of-works/parse-csv-import', [FieldOfWorksController::class, 'parseCsvImport '])->name('field-of-works.parseCsvImport');
+    Route::post('field-of-works/process-csv-import', [FieldOfWorksController::class, 'processCsvImport '])->name('field-of-works.processCsvImport');
+
+    // Designations
+    Route::delete('designations/destroy', [DesignationsController::class, 'massDestroy '])->name('designations.massDestroy');
+    Route::post('designations/parse-csv-import',[DesignationsController::class, 'parseCsvImport '])->name('designations.parseCsvImport');
+    Route::post('designations/process-csv-import',[DesignationsController::class, 'processCsvImport '])->name('designations.processCsvImport');
+
+
+    // Organizations
+    Route::delete('organizations/destroy',[OrganizationsController::class, 'massDestroy '])->name('organizations.massDestroy');
+    Route::post('organizations/parse-csv-import',[OrganizationsController::class, 'parseCsvImport '])->name('organizations.parseCsvImport');
+    Route::post('organizations/process-csv-import',[OrganizationsController::class, 'processCsvImport '])->name('organizations.processCsvImport');
+
+    // Schools
+    Route::delete('schools/destroy',[SchoolsController::class, 'massDestroy '])->name('schools.massDestroy');
+    Route::post('schools/media',[SchoolsController::class, 'storeMedia '])->name('schools.storeMedia');
+    Route::post('schools/ckmedia',[SchoolsController::class, 'storeCKEditorImages '])->name('schools.storeCKEditorImages');
+    Route::post('schools/parse-csv-import',[SchoolsController::class, 'parseCsvImport '])->name('schools.parseCsvImport');
+    Route::post('schools/process-csv-import',[SchoolsController::class, 'processCsvImport '])->name('schools.processCsvImport');
+
+
+    // Works
+    Route::delete('works/destroy',[WorksController::class, 'massDestroy '])->name('works.massDestroy');
+
+
+    // Addresses
+    Route::delete('addresses/destroy',[AddressesController::class, 'massDestroy '])->name('addresses.massDestroy');
+    Route::post('addresses/media',[AddressesController::class, 'storeMedia '])->name('addresses.storeMedia');
+    Route::post('addresses/ckmedia',[AddressesController::class, 'storeCKEditorImages '])->name('addresses.storeCKEditorImages');
+
+
+    // Event Categories
+    Route::delete('event-categories/destroy',[EventCategoriesController::class, 'massDestroy '])->name('event-categories.massDestroy');
+    Route::post('event-categories/parse-csv-import',[EventCategoriesController::class, 'parseCsvImport '])->name('event-categories.parseCsvImport');
+    Route::post('event-categories/process-csv-import',[EventCategoriesController::class, 'processCsvImport '])->name('event-categories.processCsvImport');
+
+
+    // Events
+    Route::delete('events/destroy',[EventsController::class, 'massDestroy '])->name('events.massDestroy');
+    Route::post('events/media', [EventsController::class, 'storeMedia '])->name('events.storeMedia');
+    Route::post('events/ckmedia',[EventsController::class, 'storeCKEditorImages '])->name('events.storeCKEditorImages');
+
+    Route::get('global-search',[GlobalSearchController::class, 'search '])->name('globalSearch');
+
+    // Socials
+   // Route::delete('socials/destroy', [SocialsController::class, 'massDestroy'])->name('socials.massDestroy');
 
     // Audit Logs
     Route::resource('audit-logs', AuditLogsController::class, ['except' => ['create', 'store', 'edit', 'update', 'destroy']]);
-
     //    Route::resources(['permissions' => SettingsController::class],['except' => ['create', 'store', 'show', 'destroy']]);
     Route::post('settings/media', [SettingsController::class, 'storeMedia'])->name('settings.storeMedia');
     Route::post('settings/ckmedia', [SettingsController::class, 'storeCKEditorImages'])->name('settings.storeCKEditorImages');
@@ -91,6 +189,8 @@ Route::group(['prefix' => 'alumni', 'as' => 'alumni.', 'middleware' => ['auth']]
     Route::get('/batch-mate', [AlumniDashboardController::class, 'batchMate'])->name('batch-mate');
     Route::get('/batch-mate/{profile}', [AlumniDashboardController::class, 'batchMateProfile'])->name('batch-mate.profile');
     Route::get('/schools', [AlumniDashboardController::class, 'schools'])->name('schools');
+    Route::get('/school/{name}', [AlumniDashboardController::class, 'schoolProfile'])->name('schoolProfile');
+    Route::get('/events', [AlumniDashboardController::class, 'events'])->name('events');
     Route::get('/school/{name}', [AlumniDashboardController::class, 'schoolProfile'])->name('schoolProfile');
 
 });
