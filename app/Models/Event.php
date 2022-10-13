@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
-use App\Traits\Auditable;
 use \DateTimeInterface;
 use App\Traits\MultiTenantModelTrait;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -15,11 +15,9 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 class Event extends Model implements HasMedia
 {
     use SoftDeletes;
-    use MultiTenantModelTrait;
+//    use MultiTenantModelTrait;
     use InteractsWithMedia;
     use HasFactory;
-    use Auditable;
-
 
     public const IS_FREE_SELECT = [
         '1' => 'Yes',
@@ -45,6 +43,7 @@ class Event extends Model implements HasMedia
 
     protected $dates = [
         'created_at',
+        'event_date',
         'updated_at',
         'deleted_at',
     ];
@@ -62,6 +61,8 @@ class Event extends Model implements HasMedia
         'price',
         'created_at',
         'event_status',
+        'event_date',
+        'event_time',
         'updated_at',
         'deleted_at',
         'created_by_id',
@@ -118,6 +119,16 @@ class Event extends Model implements HasMedia
     public function users()
     {
         return $this->belongsToMany(User::class);
+    }
+
+    public function getEventDateAttribute($value)
+    {
+        return $value ? Carbon::parse($value)->format(config('panel.date_format')) : null;
+    }
+
+    public function setEventDateAttribute($value)
+    {
+        $this->attributes['event_date'] = $value ? Carbon::createFromFormat(config('panel.date_format'), $value)->format('Y-m-d') : null;
     }
 
     public function created_by()

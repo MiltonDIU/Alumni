@@ -127,4 +127,23 @@ class UnionsController extends Controller
 
         return response(null, Response::HTTP_NO_CONTENT);
     }
+
+
+    //return upazila wise union
+    public function get_by_upazila(Request $request)
+    {
+        abort_unless(\Gate::allows('upazila_access'), 401);
+
+        if (!$request->upazila_id) {
+            $html = '<option value="">'.trans('global.pleaseSelect').'</option>';
+        } else {
+            $html = '';
+            $unions = Union::where('upazila_id', $request->upazila_id)->get();
+            foreach ($unions as $union) {
+                $html .= '<option value="'.$union->id.'">'.$union->name.'</option>';
+            }
+        }
+
+        return response()->json(['html' => $html]);
+    }
 }

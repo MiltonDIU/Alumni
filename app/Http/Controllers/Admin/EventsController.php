@@ -113,6 +113,10 @@ class EventsController extends Controller
                 return $row->event_status ? Event::EVENT_STATUS_SELECT[$row->event_status] : '';
             });
 
+            $table->editColumn('event_time', function ($row) {
+                return $row->event_time ? $row->event_time : '';
+            });
+
             $table->rawColumns(['actions', 'placeholder', 'event_category', 'district', 'upazila', 'union', 'picture', 'batch', 'school']);
 
             return $table->make(true);

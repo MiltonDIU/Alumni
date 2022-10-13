@@ -72,7 +72,7 @@
                 </a>
             </li>
             <li>
-                <a href="#" class="nav-link">
+                <a href="{{ route('alumni.profile') }}" class="nav-link">
                     <i class="bi bi-person-circle"></i>
                     My Profile
                 </a>

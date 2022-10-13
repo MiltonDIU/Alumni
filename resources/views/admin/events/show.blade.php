@@ -153,6 +153,22 @@
                             {{ App\Models\Event::EVENT_STATUS_SELECT[$event->event_status] ?? '' }}
                         </td>
                     </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.event.fields.event_date') }}
+                        </th>
+                        <td>
+                            {{ $event->event_date }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.event.fields.event_time') }}
+                        </th>
+                        <td>
+                            {{ $event->event_time }}
+                        </td>
+                    </tr>
                     </tbody>
                 </table>
                 <div class="form-group">

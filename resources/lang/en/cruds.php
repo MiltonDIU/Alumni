@@ -588,6 +588,10 @@ return [
             'created_by_helper'     => ' ',
             'event_status'          => 'Event Status',
             'event_status_helper'   => ' ',
+            'event_date'            => 'Event Date',
+            'event_date_helper'     => ' ',
+            'event_time'            => 'Event Time',
+            'event_time_helper'     => ' ',
         ],
     ],
 ];

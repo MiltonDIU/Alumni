@@ -111,7 +111,7 @@ class SchoolsController extends Controller
     {
         abort_if(Gate::denies('school_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $divisions = Division::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $divisions = Division::where('is_active','1')->pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
         $districts = District::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 

@@ -64,6 +64,14 @@ class StoreEventRequest extends FormRequest
             'users' => [
                 'array',
             ],
+            'event_date' => [
+                'required',
+                'date_format:' . config('panel.date_format'),
+            ],
+            'event_time' => [
+                'required',
+                'date_format:' . config('panel.time_format'),
+            ],
         ];
     }
 }

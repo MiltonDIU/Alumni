@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\Alumni;
 
 use App\Http\Controllers\Controller;
+use App\Models\Event;
+use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
@@ -12,15 +15,18 @@ class DashboardController extends Controller
      *
      * @return void
      */
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
+//    public function __construct()
+//    {
+//        $this->middleware('auth');
+//    }
 
 
 
     public function index(){
-        return view('alumni.dashboard');
+//        $total_users = count(User::all());
+//        $events = Event::get()->take(2);
+//        return view('alumni.dashboard',compact('total_users','events'));
+        return view('alumni.dashboard2');
     }
     public function batchMate(){
         return view('alumni.batch-mate');
@@ -36,7 +42,10 @@ class DashboardController extends Controller
         return view('alumni.schoolProfile');
     }
     public function events(){
-        return view('alumni.events');
+//        $upcoming_events =  Event::where('event_date','<',date('Y-m-d',strtotime(Carbon::now())))->get();
+//        dd($upcoming_events);
+//        return view('alumni.events');
+        return view('alumni.events2');
     }
 
 }

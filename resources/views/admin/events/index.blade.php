@@ -61,6 +61,12 @@
                         {{ trans('cruds.event.fields.event_status') }}
                     </th>
                     <th>
+                        {{ trans('cruds.event.fields.event_date') }}
+                    </th>
+                    <th>
+                        {{ trans('cruds.event.fields.event_time') }}
+                    </th>
+                    <th>
                         &nbsp;
                     </th>
                 </tr>
@@ -129,6 +135,8 @@
                     { data: 'batch', name: 'batches.title' },
                     { data: 'school', name: 'schools.name' },
                     { data: 'event_status', name: 'event_status' },
+                    { data: 'event_date', name: 'event_date' },
+                    { data: 'event_time', name: 'event_time' },
                     { data: 'actions', name: '{{ trans('global.actions') }}' }
                 ],
                 orderCellsTop: true,

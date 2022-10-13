@@ -36,33 +36,39 @@
                             <option value="{{ $id }}" {{ old('division_id') == $id ? 'selected' : '' }}>{{ $entry }}</option>
                         @endforeach
                     </select>
-                    @if($errors->has('division'))
+                    @if($errors->has('division_id'))
                         <div class="invalid-feedback">
-                            {{ $errors->first('division') }}
+                            {{ $errors->first('division_id') }}
                         </div>
                     @endif
                     <span class="help-block">{{ trans('cruds.school.fields.division_helper') }}</span>
                 </div>
-                <div class="form-group">
-                    <label for="district_id">{{ trans('cruds.school.fields.district') }}</label>
-                    <select class="form-control select2 {{ $errors->has('district') ? 'is-invalid' : '' }}" name="district_id" id="district_id">
-                        @foreach($districts as $id => $entry)
-                            <option value="{{ $id }}" {{ old('district_id') == $id ? 'selected' : '' }}>{{ $entry }}</option>
-                        @endforeach
+
+
+
+
+
+                <div class="form-group {{ $errors->has('district_id') ? 'has-error' : '' }}">
+                    <label for="district">{{ trans('cruds.school.fields.district') }}</label>
+                    <select name="district_id" id="district_id" class="form-control select2 {{ $errors->has('district') ? 'is-invalid' : '' }}">
+                        <option value="">{{ trans('global.pleaseSelect') }}</option>
                     </select>
-                    @if($errors->has('district'))
+                    @if($errors->has('district_id'))
                         <div class="invalid-feedback">
-                            {{ $errors->first('district') }}
+                            {{ $errors->first('district_id') }}
                         </div>
                     @endif
                     <span class="help-block">{{ trans('cruds.school.fields.district_helper') }}</span>
                 </div>
+
+
                 <div class="form-group">
                     <label for="upazila_id">{{ trans('cruds.school.fields.upazila') }}</label>
                     <select class="form-control select2 {{ $errors->has('upazila') ? 'is-invalid' : '' }}" name="upazila_id" id="upazila_id">
-                        @foreach($upazilas as $id => $entry)
-                            <option value="{{ $id }}" {{ old('upazila_id') == $id ? 'selected' : '' }}>{{ $entry }}</option>
-                        @endforeach
+{{--                        @foreach($upazilas as $id => $entry)--}}
+{{--                            <option value="{{ $id }}" {{ old('upazila_id') == $id ? 'selected' : '' }}>{{ $entry }}</option>--}}
+{{--                        @endforeach--}}
+                        <option value="">{{ trans('global.pleaseSelect') }}</option>
                     </select>
                     @if($errors->has('upazila'))
                         <div class="invalid-feedback">
@@ -74,9 +80,10 @@
                 <div class="form-group">
                     <label for="union_id">{{ trans('cruds.school.fields.union') }}</label>
                     <select class="form-control select2 {{ $errors->has('union') ? 'is-invalid' : '' }}" name="union_id" id="union_id">
-                        @foreach($unions as $id => $entry)
-                            <option value="{{ $id }}" {{ old('union_id') == $id ? 'selected' : '' }}>{{ $entry }}</option>
-                        @endforeach
+{{--                        @foreach($unions as $id => $entry)--}}
+{{--                            <option value="{{ $id }}" {{ old('union_id') == $id ? 'selected' : '' }}>{{ $entry }}</option>--}}
+{{--                        @endforeach--}}
+                        <option value="">{{ trans('global.pleaseSelect') }}</option>
                     </select>
                     @if($errors->has('union'))
                         <div class="invalid-feedback">
@@ -297,6 +304,59 @@
                 );
             }
         });
-    </script>
 
+
+        var convertName2Alias = function () {
+            var title = $(this).val().trim().toLowerCase().replace(/\s+/g, '-');
+            var slug = $('#slug').val();
+            if (slug == '') {
+                $('#slug').val(title);
+            }
+        };
+        $(function () {
+            $('#title').on('change', convertName2Alias);
+        });
+
+        var convertName2Alias = function () {
+            var name = $(this).val().trim().toLowerCase().replace(/\s+/g, '-');
+            var slug = $('#slug').val();
+            if (slug == '') {
+                $('#slug').val(name);
+            }
+        };
+        $(function () {
+            $('#name').on('change', convertName2Alias);
+        });
+
+    </script>
+        <script type="text/javascript">
+            $("#division_id").change(function(){
+                $.ajax({
+                    url: "{{ route('admin.district.get_by_division') }}?division_id=" + $(this).val(),
+                    method: 'GET',
+                    success: function(data) {
+                        $('#district_id').html(data.html);
+                    }
+                });
+            });
+
+            $("#district_id").change(function(){
+                $.ajax({
+                    url: "{{ route('admin.upazila.get_by_district') }}?district_id=" + $(this).val(),
+                    method: 'GET',
+                    success: function(data) {
+                        $('#upazila_id').html(data.html);
+                    }
+                });
+            });
+            $("#upazila_id").change(function(){
+                $.ajax({
+                    url: "{{ route('admin.union.get_by_upazila') }}?upazila_id=" + $(this).val(),
+                    method: 'GET',
+                    success: function(data) {
+                        $('#union_id').html(data.html);
+                    }
+                });
+            });
+        </script>
 @endsection

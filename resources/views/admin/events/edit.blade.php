@@ -212,6 +212,26 @@
                     <span class="help-block">{{ trans('cruds.event.fields.event_status_helper') }}</span>
                 </div>
                 <div class="form-group">
+                    <label class="required" for="event_date">{{ trans('cruds.event.fields.event_date') }}</label>
+                    <input class="form-control date {{ $errors->has('event_date') ? 'is-invalid' : '' }}" type="text" name="event_date" id="event_date" value="{{ old('event_date', $event->event_date) }}" required>
+                    @if($errors->has('event_date'))
+                        <div class="invalid-feedback">
+                            {{ $errors->first('event_date') }}
+                        </div>
+                    @endif
+                    <span class="help-block">{{ trans('cruds.event.fields.event_date_helper') }}</span>
+                </div>
+                <div class="form-group">
+                    <label class="required" for="event_time">{{ trans('cruds.event.fields.event_time') }}</label>
+                    <input class="form-control timepicker {{ $errors->has('event_time') ? 'is-invalid' : '' }}" type="text" name="event_time" id="event_time" value="{{ old('event_time', $event->event_time) }}" required>
+                    @if($errors->has('event_time'))
+                        <div class="invalid-feedback">
+                            {{ $errors->first('event_time') }}
+                        </div>
+                    @endif
+                    <span class="help-block">{{ trans('cruds.event.fields.event_time_helper') }}</span>
+                </div>
+                <div class="form-group">
                     <button class="btn btn-danger" type="submit">
                         {{ trans('global.save') }}
                     </button>

@@ -30,8 +30,8 @@ class Work extends Model
     public $table = 'works';
 
     protected $dates = [
-        'joining_date',
-        'resign_date',
+//        'joining_date',
+//        'resign_date',
         'created_at',
         'updated_at',
         'deleted_at',
